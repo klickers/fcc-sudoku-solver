@@ -15,11 +15,9 @@ class SudokuSolver {
     }
 
     checkColPlacement(puzzleString, row, column, value) {
-        let columnString = "";
         for (let i = column; i < puzzleString.length; i += 9)
-            columnString += puzzleString[i];
-        if (columnString.includes(value))
-            return "error: column already includes value";
+            if (puzzleString[i] == value)
+                return "error: column already includes value";
         return "Column placement is valid";
     }
 
