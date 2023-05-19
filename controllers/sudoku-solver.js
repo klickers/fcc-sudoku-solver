@@ -38,7 +38,39 @@ class SudokuSolver {
         return "Region placement is valid";
     }
 
-    solve(puzzleString) {}
+    solve(puzzleString) {
+        if (this.validate(puzzleString) !== "Puzzle string is valid")
+            return this.validate(puzzleString);
+
+        let rows = this.findRows(puzzleString);
+
+        for (let i = 0; i < rows.length; i++) {
+            rows[i] = rows[i].split("");
+            for (let j = 0; j < rows[i].length; j++) {
+                if (rows[i][j] == ".") {
+                    let choices = [];
+                    for (let k = 1; k <= 9; k++) {
+                        if (
+                            this.checkRowPlacement(puzzleString, i, j, k) ==
+                                "Row placement is valid" &&
+                            this.checkColPlacement(puzzleString, i, j, k) ==
+                                "Column placement is valid" &&
+                            this.checkRegionPlacement(puzzleString, i, j, k) ==
+                                "Region placement is valid"
+                        )
+                            choices.push(k);
+                    }
+                    if (choices.length == 1) rows[i][j] = choices[0];
+                    else if (choices.length == 0)
+                        return "Puzzle string is not valid";
+                }
+            }
+            rows[i] = rows[i].join("");
+        }
+
+        if (/[.]/.test(rows.join(""))) return this.solve(rows.join(""));
+        return rows.join("");
+    }
 }
 
 module.exports = SudokuSolver;
