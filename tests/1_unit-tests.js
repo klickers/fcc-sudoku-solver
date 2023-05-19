@@ -58,4 +58,30 @@ suite("Unit Tests", () => {
         );
         done();
     });
+
+    test("Logic handles a valid column placement", function (done) {
+        assert.equal(
+            solver.checkColPlacement(
+                "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.",
+                0,
+                1,
+                3
+            ),
+            "Column placement is valid"
+        );
+        done();
+    });
+
+    test("Logic handles an invalid column placement", function (done) {
+        assert.equal(
+            solver.checkColPlacement(
+                "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.",
+                0,
+                0,
+                8
+            ),
+            "error: column already includes value"
+        );
+        done();
+    });
 });

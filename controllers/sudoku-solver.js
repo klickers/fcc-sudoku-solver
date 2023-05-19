@@ -14,7 +14,14 @@ class SudokuSolver {
         return "Row placement is valid";
     }
 
-    checkColPlacement(puzzleString, row, column, value) {}
+    checkColPlacement(puzzleString, row, column, value) {
+        let columnString = "";
+        for (let i = column; i < puzzleString.length; i += 9)
+            columnString += puzzleString[i];
+        if (columnString.includes(value))
+            return "error: column already includes value";
+        return "Column placement is valid";
+    }
 
     checkRegionPlacement(puzzleString, row, column, value) {}
 
