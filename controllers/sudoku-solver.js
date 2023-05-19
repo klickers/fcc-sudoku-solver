@@ -7,8 +7,12 @@ class SudokuSolver {
         return "Puzzle string is valid";
     }
 
+    findRows(puzzleString) {
+        return puzzleString.match(/.{1,9}/g);
+    }
+
     checkRowPlacement(puzzleString, row, column, value) {
-        let rows = puzzleString.match(/.{1,9}/g);
+        let rows = this.findRows(puzzleString);
         if (rows[row].includes(value))
             return "error: row already includes value";
         return "Row placement is valid";
@@ -21,7 +25,18 @@ class SudokuSolver {
         return "Column placement is valid";
     }
 
-    checkRegionPlacement(puzzleString, row, column, value) {}
+    checkRegionPlacement(puzzleString, row, column, value) {
+        const BOUNDS = { 0: 0, 1: 0, 2: 0, 3: 3, 4: 3, 5: 3, 6: 6, 7: 6, 8: 6 };
+        let rows = this.findRows(puzzleString),
+            rowStart = BOUNDS[row],
+            colStart = BOUNDS[column];
+
+        for (let i = rowStart; i < rowStart + 3; i++)
+            for (let j = colStart; j < colStart + 3; j++)
+                if (rows[i][j] == value)
+                    return "error: region already includes value";
+        return "Region placement is valid";
+    }
 
     solve(puzzleString) {}
 }
