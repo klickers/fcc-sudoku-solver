@@ -39,9 +39,69 @@ class SudokuSolver {
         return "Region placement is valid";
     }
 
+    hasDuplicates(arr) {
+        let unique = false;
+        arr.map((item, index) => {
+            if (arr.indexOf(item) !== index && item != ".") {
+                unique = true;
+                return true;
+            }
+        });
+        return unique;
+    }
+
+    hasRowDuplicates(puzzleString) {
+        let rows = this.findRows(puzzleString);
+        for (let i = 0; i < rows.length; i++) {
+            rows[i] = rows[i].split("");
+            if (this.hasDuplicates(rows[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    hasColumnDuplicates(puzzleString) {
+        let rows = this.findRows(puzzleString);
+        let columns = [[], [], [], [], [], [], [], [], []];
+
+        for (let i = 0; i < rows.length; i++)
+            for (let j = 0; j < rows[i].length; j++)
+                columns[j].push(rows[i][j]);
+
+        for (let i = 0; i < columns.length; i++)
+            if (this.hasDuplicates(columns[i])) return true;
+
+        return false;
+    }
+
+    hasRegionDuplicates(puzzleString) {
+        const BOXES = { 0: 0, 1: 0, 2: 0, 3: 1, 4: 1, 5: 1, 6: 2, 7: 2, 8: 2 };
+        let regions = [[], [], [], [], [], [], [], [], []];
+        let rows = this.findRows(puzzleString);
+
+        for (let i = 0; i < rows.length; i++) {
+            rows[i] = rows[i].split("");
+            for (let j = 0; j < rows[i].length; j++)
+                regions[BOXES[i] * 3 + BOXES[j]].push(rows[i][j]);
+        }
+
+        for (let i = 0; i < regions.length; i++)
+            if (this.hasDuplicates(regions[i])) return true;
+
+        return false;
+    }
+
     solve(puzzleString) {
         if (this.validate(puzzleString) !== "Puzzle string is valid")
             return this.validate(puzzleString);
+
+        if (
+            this.hasRowDuplicates(puzzleString) ||
+            this.hasColumnDuplicates(puzzleString) ||
+            this.hasRegionDuplicates(puzzleString)
+        )
+            return { error: "Puzzle cannot be solved" };
 
         let rows = this.findRows(puzzleString);
 

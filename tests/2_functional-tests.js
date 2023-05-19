@@ -196,7 +196,7 @@ suite("Functional Tests", () => {
             .send({
                 puzzle: "5..91372.3...8.5.9.9.25..8.68.47.23...95..46.7.4.....5.2.......4..8916..85.72...3",
                 coordinate: "A2",
-                value: 10,
+                value: "A",
             })
             .end(function (err, res) {
                 assert.equal(res.body.error, "Invalid value");

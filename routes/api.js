@@ -6,18 +6,28 @@ module.exports = function (app) {
     let solver = new SudokuSolver();
 
     app.route("/api/check").post((req, res) => {
-        const { puzzle, coordinate, value } = req.body;
+        const puzzle = req.body.puzzle;
+        const coordinate = req.body.coordinate;
+        const originalValue = req.body.value;
+        let value = parseInt(originalValue);
 
-        if (!puzzle || !coordinate || !value)
+        if ((!puzzle || !coordinate || !originalValue) && value != 0)
             res.json({ error: "Required field(s) missing" });
         else if (solver.validate(puzzle) != "Puzzle string is valid")
             res.json(solver.validate(puzzle));
-        else if (value > 9 || value < 1) res.json({ error: "Invalid value" });
+        else if (!/^[123456789]$/.test(value))
+            res.json({ error: "Invalid value" });
 
         const row = coordinate.charCodeAt(0) - 65;
         const column = coordinate.charAt(1) - 1;
 
-        if (row > 8 || row < 0 || column > 8 || column < 0)
+        if (
+            row > 8 ||
+            row < 0 ||
+            column > 8 ||
+            column < 0 ||
+            coordinate.length > 2
+        )
             res.json({ error: "Invalid coordinate" });
 
         let conflicts = [];
@@ -38,7 +48,12 @@ module.exports = function (app) {
         )
             conflicts.push("region");
 
-        if (conflicts.length == 0) res.json({ valid: true });
+        if (
+            conflicts.length == 0 ||
+            solver.findRows(puzzle)[row][column] == value
+        )
+            res.json({ valid: true });
+
         res.json({ valid: false, conflict: conflicts });
     });
 
