@@ -21,16 +21,16 @@ suite("Unit Tests", () => {
         assert.equal(
             solver.validate(
                 "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.3#."
-            ),
-            "error: puzzle string contains invalid characters"
+            ).error,
+            "Invalid characters in puzzle"
         );
         done();
     });
 
     test("Logic handles a puzzle string that is not 81 characters in length", function (done) {
         assert.equal(
-            solver.validate("1.5..2.84..63.12.7.2..5.....9..1....8.2"),
-            "error: puzzle string is not 81 characters long"
+            solver.validate("1.5..2.84..63.12.7.2..5.....9..1....8.2").error,
+            "Expected puzzle to be 81 characters long"
         );
         done();
     });
@@ -117,7 +117,7 @@ suite("Unit Tests", () => {
         assert.equal(
             solver.solve(
                 "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37."
-            ),
+            ).solution,
             "135762984946381257728459613694517832812936745357824196473298561581673429269145378"
         );
         done();
@@ -127,27 +127,27 @@ suite("Unit Tests", () => {
         assert.equal(
             solver.solve(
                 "155..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37."
-            ),
-            "Puzzle string is not valid"
+            ).error,
+            "Puzzle cannot be solved"
         );
         assert.equal(
             solver.solve(
                 "1.5..2.84..63.12.x.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37."
-            ),
-            "error: puzzle string contains invalid characters"
+            ).error,
+            "Invalid characters in puzzle"
         );
         assert.equal(
             solver.solve(
                 "1.5..2.84..63.12..2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37."
-            ),
-            "error: puzzle string is not 81 characters long"
+            ).error,
+            "Expected puzzle to be 81 characters long"
         );
         done();
     });
 
     test("Solver returns the expected solution for an incomplete puzzle", function (done) {
         puzzlesAndSolutions.puzzlesAndSolutions.forEach((puzzle) =>
-            assert.equal(solver.solve(puzzle[0]), puzzle[1])
+            assert.equal(solver.solve(puzzle[0]).solution, puzzle[1])
         );
         done();
     });

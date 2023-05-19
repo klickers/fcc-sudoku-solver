@@ -1,9 +1,10 @@
 class SudokuSolver {
     validate(puzzleString) {
-        if (!/^[\d.]+$/.test(puzzleString))
-            return "error: puzzle string contains invalid characters";
-        if (puzzleString.length !== 81)
-            return "error: puzzle string is not 81 characters long";
+        if (!puzzleString) return { error: "Required field missing" };
+        else if (!/^[\d.]+$/.test(puzzleString))
+            return { error: "Invalid characters in puzzle" };
+        else if (puzzleString.length !== 81)
+            return { error: "Expected puzzle to be 81 characters long" };
         return "Puzzle string is valid";
     }
 
@@ -62,14 +63,14 @@ class SudokuSolver {
                     }
                     if (choices.length == 1) rows[i][j] = choices[0];
                     else if (choices.length == 0)
-                        return "Puzzle string is not valid";
+                        return { error: "Puzzle cannot be solved" };
                 }
             }
             rows[i] = rows[i].join("");
         }
 
         if (/[.]/.test(rows.join(""))) return this.solve(rows.join(""));
-        return rows.join("");
+        return { solution: rows.join("") };
     }
 }
 
