@@ -7,7 +7,12 @@ class SudokuSolver {
         return "Puzzle string is valid";
     }
 
-    checkRowPlacement(puzzleString, row, column, value) {}
+    checkRowPlacement(puzzleString, row, column, value) {
+        let rows = puzzleString.match(/.{1,9}/g);
+        if (rows[row].includes(value))
+            return "error: row already includes value";
+        return "Row placement is valid";
+    }
 
     checkColPlacement(puzzleString, row, column, value) {}
 

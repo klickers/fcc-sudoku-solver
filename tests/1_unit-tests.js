@@ -32,4 +32,30 @@ suite("Unit Tests", () => {
         );
         done();
     });
+
+    test("Logic handles a valid row placement", function (done) {
+        assert.equal(
+            solver.checkRowPlacement(
+                "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.",
+                0,
+                1,
+                3
+            ),
+            "Row placement is valid"
+        );
+        done();
+    });
+
+    test("Logic handles an invalid row placement", function (done) {
+        assert.equal(
+            solver.checkRowPlacement(
+                "1.5..2.84..63.12.7.2..5.....9..1....8.2.3674.3.7.2..9.47...8..1..16....926914.37.",
+                0,
+                1,
+                5
+            ),
+            "error: row already includes value"
+        );
+        done();
+    });
 });
